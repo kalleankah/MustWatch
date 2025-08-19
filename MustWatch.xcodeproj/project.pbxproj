@@ -17,6 +17,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC2B3A662E55067A0004C9AF /* MustWatch.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MustWatch.xctestplan; sourceTree = "<group>"; };
 		DC5962A32E5502A800B9A570 /* MustWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MustWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC5962B52E5502A900B9A570 /* MustWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -55,6 +56,7 @@
 		DC59629A2E5502A700B9A570 = {
 			isa = PBXGroup;
 			children = (
+				DC2B3A662E55067A0004C9AF /* MustWatch.xctestplan */,
 				DC5962A52E5502A800B9A570 /* MustWatch */,
 				DC5962B82E5502A900B9A570 /* MustWatchTests */,
 				DC5962A42E5502A800B9A570 /* Products */,

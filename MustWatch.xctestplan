@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "65B8EAC1-89A9-4D43-8290-692968BF57D4",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MustWatch.xcodeproj",
+      "identifier" : "DC5962A22E5502A800B9A570",
+      "name" : "MustWatch"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MustWatch.xcodeproj",
+        "identifier" : "DC5962B42E5502A900B9A570",
+        "name" : "MustWatchTests"
+      }
+    }
+  ],
+  "version" : 1
+}
