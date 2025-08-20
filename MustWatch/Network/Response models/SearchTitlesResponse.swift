@@ -5,7 +5,7 @@
 //  Created by Karl Eknefelt on 2025-08-19.
 //
 
-struct SearchTitlesResponse: Decodable {
+struct SearchTitlesResponse: Decodable, Equatable {
     let titles: [Title]
     let totalResults: String
     let response: String
@@ -32,5 +32,15 @@ extension SearchTitlesResponse {
             case type = "Type"
             case poster = "Poster"
         }
+    }
+}
+
+struct TitlesApiResponseError: Decodable, Error, Equatable {
+    let response: String
+    let error: String
+
+    enum CodingKeys: String, CodingKey {
+        case response = "Response"
+        case error = "Error"
     }
 }
