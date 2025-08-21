@@ -11,19 +11,7 @@ import SwiftUI
 struct MustWatchApp: App {
     var body: some Scene {
         WindowGroup {
-            PlaceholderView()
+            LandingTabView()
         }
     }
-}
-
-struct PlaceholderView: View {
-    var body: some View {
-        Button("Test") {
-
-        }
-    }
-}
-
-#Preview {
-    PlaceholderView()
 }
