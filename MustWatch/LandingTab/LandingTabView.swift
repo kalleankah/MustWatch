@@ -10,7 +10,7 @@ import SwiftUI
 struct LandingTabView: View {
     var body: some View {
         TabView {
-            SearchView()
+            FindTitlesView()
                 .tabItem {
                     Label("Find", systemImage: "magnifyingglass")
                 }
