@@ -15,7 +15,7 @@ struct TitlesRepositoryTests {
     let repository: any TitlesRepository
 
     init() {
-        api = TitlesApiMock(dataToReturn: apiResponseData)
+        api = TitlesApiMock()
         repository = TitlesRepositoryLive(api: api)
     }
 
@@ -26,7 +26,7 @@ struct TitlesRepositoryTests {
         let type = Title.ContentType.episode
         let year = 2000
 
-        try #require(await api.numberOfCalls == 0)
+        try #require(await api.numberOfCallsSearchTitles == 0)
 
         _ = try await repository.searchTitles(
             by: searchTerm,
@@ -34,7 +34,7 @@ struct TitlesRepositoryTests {
             year: year
         )
 
-        #expect(await api.numberOfCalls == 1)
+        #expect(await api.numberOfCallsSearchTitles == 1)
     }
 
     @Test("Parse API response to data model")
@@ -71,7 +71,7 @@ struct TitlesRepositoryTests {
             year: year
         )
 
-        #expect(await api.numberOfCalls == 1)
+        #expect(await api.numberOfCallsSearchTitles == 1)
 
         let secondResult = try await repository.searchTitles(
             by: searchTerm,
@@ -79,7 +79,7 @@ struct TitlesRepositoryTests {
             year: year
         )
 
-        #expect(await api.numberOfCalls == 1)
+        #expect(await api.numberOfCallsSearchTitles == 1)
         #expect(firstResult == secondResult)
     }
 }
