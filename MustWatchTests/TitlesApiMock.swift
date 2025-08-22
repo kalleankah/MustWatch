@@ -26,7 +26,8 @@ class TitlesApiMock: TitlesApi, @unchecked Sendable {
     }
 
     func fetchTitle(
-        by imdbID: String
+        by imdbID: String,
+        fullPlot: Bool
     ) async throws(TitlesApiError) -> TitleDetailResponse {
         numberOfCallsFetchTitle += 1
         return dataToReturnFetchTitle ?? .empty

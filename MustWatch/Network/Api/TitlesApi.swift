@@ -20,7 +20,7 @@ protocol TitlesApi: Sendable {
         year: Int?
     ) async throws(TitlesApiError) -> SearchTitlesResponse
 
-    func fetchTitle(by imdbID: String) async throws(TitlesApiError) -> TitleDetailResponse
+    func fetchTitle(by imdbID: String, fullPlot: Bool) async throws(TitlesApiError) -> TitleDetailResponse
 }
 
 struct TitlesApiLive: TitlesApi {
@@ -100,15 +100,21 @@ struct TitlesApiLive: TitlesApi {
         }
     }
 
-    func fetchTitle(by imdbID: String) async throws(TitlesApiError) -> TitleDetailResponse {
+    func fetchTitle(by imdbID: String, fullPlot: Bool) async throws(TitlesApiError) -> TitleDetailResponse {
         guard var urlComponents = URLComponents(string: baseURL) else {
             throw TitlesApiError.invalidURL
         }
 
-        urlComponents.queryItems = [
+        var queryItems: [URLQueryItem] = [
             URLQueryItem(name: "apikey", value: apiKey),
             URLQueryItem(name: "i", value: imdbID)
         ]
+
+        if fullPlot {
+            queryItems.append(URLQueryItem(name: "plot", value: "full"))
+        }
+
+        urlComponents.queryItems = queryItems
 
         guard let url = urlComponents.url else {
             throw TitlesApiError.invalidURL

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SearchTitlesView: View {
-    @Environment(\.titlesRepository) var repository
+    @Environment(\.searchTitlesRepository) var repository
 
     @State var titles: [Title] = []
     @State private var searchText: String = ""
@@ -133,12 +133,12 @@ struct SearchTitlesView: View {
 
 #Preview {
     SearchTitlesView()
-        .environment(\.titlesRepository, SearchTitlesRepositoryMock())
+        .environment(\.searchTitlesRepository, SearchTitlesRepositoryMock())
 }
 
 #Preview("Response error") {
     let repositoryMock = SearchTitlesRepositoryMock(error: .responseError)
 
     SearchTitlesView()
-        .environment(\.titlesRepository, repositoryMock)
+        .environment(\.searchTitlesRepository, repositoryMock)
 }

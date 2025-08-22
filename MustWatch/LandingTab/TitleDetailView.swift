@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct TitleDetailView: View {
-    var api: TitlesApi = TitlesApiLive() // TODO: Replace with repository
+    @Environment(\.titleDetailsRepository) private var repository
 
     var name: String
     var type: String
     var year: String
     var imdbID: String
 
-    @State var titleDetailResponse: TitleDetailResponse? // TODO: Replace with domain model
+    @State var titleDetail: TitleDetail?
 
     var body: some View {
         VStack {
@@ -31,13 +31,16 @@ struct TitleDetailView: View {
                     .font(.subheadline)
             }
 
-            if let titleDetailResponse {
-                Text(titleDetailResponse.plot)
+            if let titleDetail {
+                Text(titleDetail.plot)
             }
         }
         .task {
             do {
-                titleDetailResponse = try await api.fetchTitle(by: imdbID)
+                titleDetail = try await repository.fetchTitle(
+                    by: imdbID,
+                    fullPlot: false
+                )
             } catch {
                 print("fail")
             }

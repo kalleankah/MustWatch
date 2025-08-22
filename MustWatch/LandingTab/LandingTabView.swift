@@ -25,5 +25,5 @@ struct LandingTabView: View {
 
 #Preview {
     LandingTabView()
-        .environment(\.titlesRepository, SearchTitlesRepositoryMock())
+        .environment(\.searchTitlesRepository, SearchTitlesRepositoryMock())
 }
