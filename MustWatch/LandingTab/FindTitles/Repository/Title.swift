@@ -17,20 +17,3 @@ struct Title: Hashable {
     let type: ContentType
     let imdbID: String
 }
-
-extension Title {
-    static let sampleData: [Title] = [
-        Title(
-            name: "name 1",
-            year: "year 1",
-            type: .episode,
-            imdbID: "imdbID 1"
-        ),
-        Title(
-            name: "name 2",
-            year: "year 2",
-            type: .movie,
-            imdbID: "imdbID 2"
-        )
-    ]
-}

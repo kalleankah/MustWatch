@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FindTitlesView: View {
-    let repository: any TitlesRepository = TitlesRepositoryLive()
+    @Environment(\.titlesRepository) var repository
 
     @State var titles: [Title] = []
     @State private var searchText: String = ""
@@ -124,5 +124,6 @@ struct FindTitlesView: View {
 }
 
 #Preview {
-    FindTitlesView(titles: Title.sampleData)
+    FindTitlesView()
+        .environment(\.titlesRepository, TitlesRepositoryMock())
 }
