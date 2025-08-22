@@ -70,12 +70,18 @@ actor TitlesRepositoryLive: TitlesRepository {
             switch error {
             case .invalidURL, .requestFailed(_):
                 throw .requestError
-            case .decodingError(_), .parsingFailure:
+            case .parsingFailure:
                 throw .responseError
             case .requestCancelled:
                 throw .requestCancelled
             case .tooManyResults:
                 throw .tooManyResults
+            case .noResults:
+                throw .noResults
+            case .authenticationFailure:
+                throw .authenticationFailure
+            case .unknown(_):
+                throw .responseError
             }
         }
 

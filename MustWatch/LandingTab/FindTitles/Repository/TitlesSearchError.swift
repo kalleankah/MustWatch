@@ -13,6 +13,8 @@ enum TitlesSearchError: LocalizedError {
     case parsingError
     case requestCancelled
     case tooManyResults
+    case noResults
+    case authenticationFailure
 
     var errorDescription: String? {
         switch self {
@@ -26,6 +28,10 @@ enum TitlesSearchError: LocalizedError {
             "Too many matches, refine the search term"
         case .requestCancelled:
             nil
+        case .noResults:
+            "No results found"
+        case .authenticationFailure:
+            "Authentication failure"
         }
     }
 }

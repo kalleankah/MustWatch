@@ -50,7 +50,7 @@ struct TitlesApiTests {
 
         let expectedResult = TitlesApiResponseError(
             response: "False",
-            error: "Invalid API key!"
+            errorReason: .invalidApiKey
         )
 
         let result = try JSONDecoder().decode(TitlesApiResponseError.self, from: data)

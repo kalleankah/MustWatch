@@ -33,6 +33,8 @@ struct TitlesApiLive: TitlesApi {
         self.session = session
     }
 
+    // MARK: Protocol conformances
+
     func searchTitles(
         by searchTerm: String,
         type: TitleContentType?,
@@ -74,16 +76,24 @@ struct TitlesApiLive: TitlesApi {
             throw TitlesApiError.requestFailed(underlyingError: error)
         }
 
+        let result: Result<SearchTitlesResponse, TitlesApiResponseError.ErrorReason>
+
         do {
-            return try parseResponse(
+            result = try parseResponse(
                 SearchTitlesResponse.self,
                 from: data,
                 response: response
             )
         } catch {
-            throw TitlesApiError.decodingError(underlyingError: error)
+            throw TitlesApiError.parsingFailure
         }
 
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(let response):
+            throw parseFailure(response)
+        }
     }
 
     func fetchTitle(by imdbID: String) async throws(TitlesApiError) -> TitleDetailResponse {
@@ -109,41 +119,58 @@ struct TitlesApiLive: TitlesApi {
             throw TitlesApiError.requestFailed(underlyingError: error)
         }
 
+        let result: Result<TitleDetailResponse, TitlesApiResponseError.ErrorReason>
+
         do {
-            return try parseResponse(
+            result = try parseResponse(
                 TitleDetailResponse.self,
                 from: data,
                 response: response
             )
         } catch {
-            throw TitlesApiError.decodingError(underlyingError: error)
+            throw TitlesApiError.parsingFailure
+        }
+
+        switch result {
+        case .success(let response):
+            return response
+        case .failure(let response):
+            throw parseFailure(response)
         }
     }
+
+    // MARK: Private functions
 
     private func parseResponse<T: Decodable>(
         _ type: T.Type,
         from data: Data,
         response: URLResponse
-    ) throws(TitlesApiError) -> T {
+    ) throws -> Result<T, TitlesApiResponseError.ErrorReason> {
         let decoder = JSONDecoder()
 
         guard
             let httpResponse = response as? HTTPURLResponse,
             (200...299).contains(httpResponse.statusCode)
         else {
-            do {
-                let failureResponse = try decoder.decode(TitlesApiResponseError.self, from: data)
-                throw TitlesApiError.parsingFailure(message: failureResponse.error)
-            } catch {
-                throw TitlesApiError.decodingError(underlyingError: error)
-            }
+            let failureResponse = try decoder.decode(TitlesApiResponseError.self, from: data)
+
+            return .failure(failureResponse.errorReason)
         }
 
-        do {
-            let successfulResponse = try decoder.decode(T.self, from: data)
-            return successfulResponse
-        } catch {
-            throw TitlesApiError.decodingError(underlyingError: error)
+        let successfulResponse = try decoder.decode(T.self, from: data)
+        return .success(successfulResponse)
+    }
+
+    private func parseFailure(_ failure: TitlesApiResponseError.ErrorReason) -> TitlesApiError {
+        switch failure {
+        case .tooManyResults:
+            return .tooManyResults
+        case .noResults:
+            return .noResults
+        case .invalidApiKey:
+            return .authenticationFailure
+        case .unknown(let message):
+            return .unknown(message: message)
         }
     }
 }
