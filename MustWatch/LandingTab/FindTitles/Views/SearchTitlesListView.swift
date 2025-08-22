@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct SearchResultListView: View {
+struct SearchTitlesListView: View {
     var titles: [Title]
     @Binding var selectedTitle: Title?
 
     var body: some View {
         List(titles, id: \.imdbID) { title in
             NavigationLink(value: title) {
-                TitleListItemView(
+                TitleCellView(
                     name: title.name,
                     type: title.type.rawValue,
                     year: title.year

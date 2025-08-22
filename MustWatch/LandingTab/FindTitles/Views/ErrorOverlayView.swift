@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ErrorOverlayView: View {
-    var error: TitlesSearchError?
+    var error: TitlesError?
     var action: (() -> Void)?
     var actionAccessibilityHint: String?
 
@@ -34,7 +34,7 @@ struct ErrorOverlayView: View {
 }
 
 #Preview {
-    @Previewable @State var error = TitlesSearchError.responseError
+    @Previewable @State var error = TitlesError.responseError
 
     ErrorOverlayView(error: error)
 }

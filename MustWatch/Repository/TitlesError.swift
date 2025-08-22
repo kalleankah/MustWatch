@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TitlesSearchError: LocalizedError {
+enum TitlesError: LocalizedError {
     case requestError
     case responseError
     case parsingError

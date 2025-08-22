@@ -5,15 +5,15 @@
 //  Created by Karl Eknefelt on 2025-08-22.
 //
 
-struct TitlesRepositoryMock: TitlesRepository {
+struct SearchTitlesRepositoryMock: SearchTitlesRepository {
     var dataToReturn = Title.sampleData
-    var error: TitlesSearchError?
+    var error: TitlesError?
 
     func searchTitles(
         by searchTerm: String,
         type: Title.ContentType?,
         year: Int?
-    ) async throws(TitlesSearchError) -> [Title] {
+    ) async throws(TitlesError) -> [Title] {
         if let error {
             throw error
         }

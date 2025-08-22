@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TitleListItemView: View {
+struct TitleCellView: View {
     let name: String
     let type: String
     let year: String
@@ -30,5 +30,5 @@ struct TitleListItemView: View {
 }
 
 #Preview {
-    TitleListItemView(name: "Harry potter", type: "movie", year: "2004")
+    TitleCellView(name: "Harry potter", type: "movie", year: "2004")
 }

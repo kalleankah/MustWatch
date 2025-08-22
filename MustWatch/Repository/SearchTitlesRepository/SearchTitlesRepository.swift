@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol TitlesRepository: Sendable {
+protocol SearchTitlesRepository: Sendable {
     func searchTitles(
         by searchTerm: String,
         type: Title.ContentType?,
         year: Int?
-    ) async throws(TitlesSearchError) -> [Title]
+    ) async throws(TitlesError) -> [Title]
 }
 
 private struct SearchRequest: Hashable {
@@ -21,7 +21,7 @@ private struct SearchRequest: Hashable {
     let year: Int?
 }
 
-actor TitlesRepositoryLive: TitlesRepository {
+actor SearchTitlesRepositoryLive: SearchTitlesRepository {
     private let api: TitlesApi
 
     private var cache: [SearchRequest: [Title]] = [:]
@@ -34,7 +34,7 @@ actor TitlesRepositoryLive: TitlesRepository {
         by searchTerm: String,
         type: Title.ContentType?,
         year: Int?
-    ) async throws(TitlesSearchError) -> [Title] {
+    ) async throws(TitlesError) -> [Title] {
         let request = SearchRequest(searchTerm: searchTerm, type: type, year: year)
 
         if let cachedData = cache[request] {
@@ -56,7 +56,7 @@ actor TitlesRepositoryLive: TitlesRepository {
         by searchTerm: String,
         type: Title.ContentType?,
         year: Int?
-    ) async throws(TitlesSearchError) -> [Title] {
+    ) async throws(TitlesError) -> [Title] {
         let type = TitleContentType(from: type)
 
         let titlesResponse: SearchTitlesResponse
@@ -92,7 +92,7 @@ actor TitlesRepositoryLive: TitlesRepository {
 
     private func parseTitles(
         from titlesResponse: SearchTitlesResponse
-    ) throws(TitlesSearchError) -> [Title] {
+    ) throws(TitlesError) -> [Title] {
         var titles: [Title] = []
 
         for responseModel in titlesResponse.titles {

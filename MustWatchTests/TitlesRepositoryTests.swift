@@ -12,11 +12,11 @@ import Testing
 struct TitlesRepositoryTests {
     let apiResponseData = SearchTitlesResponse.sample
     let api: TitlesApiMock
-    let repository: any TitlesRepository
+    let repository: any SearchTitlesRepository
 
     init() {
         api = TitlesApiMock()
-        repository = TitlesRepositoryLive(api: api)
+        repository = SearchTitlesRepositoryLive(api: api)
     }
 
     // Given empty cache, when calling searchTitles, should make a new request

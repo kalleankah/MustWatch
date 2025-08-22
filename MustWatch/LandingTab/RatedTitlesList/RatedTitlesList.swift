@@ -16,7 +16,7 @@ struct RatedTitlesList: View {
         NavigationStack {
             List(titles) { title in
                 NavigationLink(value: title) {
-                    TitleListItemView(
+                    TitleCellView(
                         name: title.name,
                         type: title.type.rawValue,
                         year: title.year

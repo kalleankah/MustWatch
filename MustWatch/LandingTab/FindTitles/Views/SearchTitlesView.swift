@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct FindTitlesView: View {
+struct SearchTitlesView: View {
     @Environment(\.titlesRepository) var repository
 
     @State var titles: [Title] = []
     @State private var searchText: String = ""
-    @State private var error: TitlesSearchError?
+    @State private var error: TitlesError?
 
     @State private var isShowingFilters = false
     @State private var selectedTitle: Title?
@@ -34,7 +34,7 @@ struct FindTitlesView: View {
 
     var body: some View {
         NavigationStack {
-            SearchResultListView(
+            SearchTitlesListView(
                 titles: titles,
                 selectedTitle: $selectedTitle
             )
@@ -61,7 +61,7 @@ struct FindTitlesView: View {
         .animation(.default, value: error)
         .sheet(isPresented: $isShowingFilters) {
             NavigationStack {
-                TitleSearchFilterView(
+                SearchSearchFilterView(
                     type: $contentTypeFilter,
                     year: $yearFilter
                 )
@@ -132,13 +132,13 @@ struct FindTitlesView: View {
 }
 
 #Preview {
-    FindTitlesView()
-        .environment(\.titlesRepository, TitlesRepositoryMock())
+    SearchTitlesView()
+        .environment(\.titlesRepository, SearchTitlesRepositoryMock())
 }
 
 #Preview("Response error") {
-    let repositoryMock = TitlesRepositoryMock(error: .responseError)
+    let repositoryMock = SearchTitlesRepositoryMock(error: .responseError)
 
-    FindTitlesView()
+    SearchTitlesView()
         .environment(\.titlesRepository, repositoryMock)
 }

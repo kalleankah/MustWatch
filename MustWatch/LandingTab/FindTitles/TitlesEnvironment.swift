@@ -8,5 +8,5 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    @Entry var titlesRepository: any TitlesRepository = TitlesRepositoryLive()
+    @Entry var titlesRepository: any SearchTitlesRepository = SearchTitlesRepositoryLive()
 }

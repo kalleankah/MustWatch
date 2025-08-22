@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TitleSearchFilterView: View {
+struct SearchSearchFilterView: View {
     @Environment(\.dismiss) var dismiss
 
     @Binding var type: Title.ContentType?
@@ -65,5 +65,5 @@ struct TitleSearchFilterView: View {
     @Previewable @State var type: Title.ContentType? = nil
     @Previewable @State var year: Int? = nil
 
-    TitleSearchFilterView(type: $type, year: $year)
+    SearchSearchFilterView(type: $type, year: $year)
 }

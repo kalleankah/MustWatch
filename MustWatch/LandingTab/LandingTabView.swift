@@ -10,7 +10,7 @@ import SwiftUI
 struct LandingTabView: View {
     var body: some View {
         TabView {
-            FindTitlesView()
+            SearchTitlesView()
                 .tabItem {
                     Label("Find", systemImage: "magnifyingglass")
                 }
@@ -25,5 +25,5 @@ struct LandingTabView: View {
 
 #Preview {
     LandingTabView()
-        .environment(\.titlesRepository, TitlesRepositoryMock())
+        .environment(\.titlesRepository, SearchTitlesRepositoryMock())
 }
