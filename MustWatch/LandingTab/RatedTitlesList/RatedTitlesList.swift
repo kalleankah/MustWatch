@@ -10,7 +10,7 @@ import SwiftData
 
 struct RatedTitlesList: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var titles: [TitleModel]
+    @Query private var titles: [TitleDetailModel]
 
     var body: some View {
         NavigationStack {
@@ -23,7 +23,7 @@ struct RatedTitlesList: View {
                     )
                 }
             }
-            .navigationDestination(for: TitleModel.self) { title in
+            .navigationDestination(for: TitleDetailModel.self) { title in
                 TitleDetailView(
                     name: title.name,
                     type: title.type.rawValue,
@@ -38,18 +38,18 @@ struct RatedTitlesList: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(
-        for: TitleModel.self,
+        for: TitleDetailModel.self,
         configurations: config
     )
 
     let titles = [
-        TitleModel(
+        TitleDetailModel(
             name: "Shrek",
             year: "2000",
             type: .movie,
             imdbID: "1"
         ),
-        TitleModel(
+        TitleDetailModel(
             name: "Hercules",
             year: "1997",
             type: .movie,

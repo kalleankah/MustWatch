@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-class TitleModel {
+class TitleDetailModel {
     enum ContentType: String, Codable {
         case movie
         case series
@@ -28,7 +28,7 @@ class TitleModel {
     }
 }
 
-extension TitleModel.ContentType {
+extension TitleDetailModel.ContentType {
     init(from type: Title.ContentType) {
         self = switch type {
         case .movie:
@@ -41,7 +41,7 @@ extension TitleModel.ContentType {
     }
 }
 
-extension TitleModel {
+extension TitleDetailModel {
     convenience init(from title: Title) {
         self.init(
             name: title.name,
