@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct TitleDetailView: View {
+    var api: TitlesApi = TitlesApiLive() // TODO: Replace with repository
+
     var name: String
     var type: String
     var year: String
+    var imdbID: String
+
+    @State var titleDetailResponse: TitleDetailResponse? // TODO: Replace with domain model
 
     var body: some View {
         VStack {
@@ -25,6 +30,17 @@ struct TitleDetailView: View {
                 Text(year)
                     .font(.subheadline)
             }
+
+            if let titleDetailResponse {
+                Text(titleDetailResponse.plot)
+            }
+        }
+        .task {
+            do {
+                titleDetailResponse = try await api.fetchTitle(by: imdbID)
+            } catch {
+                print("fail")
+            }
         }
     }
 }
@@ -33,6 +49,7 @@ struct TitleDetailView: View {
     TitleDetailView(
         name: "Shrek",
         type: "movie",
-        year: "2009"
+        year: "2009",
+        imdbID: "1"
     )
 }

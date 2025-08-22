@@ -31,7 +31,8 @@ struct SearchResultListView: View {
             TitleDetailView(
                 name: title.name,
                 type: title.type.rawValue,
-                year: title.year
+                year: title.year,
+                imdbID: title.imdbID
             )
         }
     }

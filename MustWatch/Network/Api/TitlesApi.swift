@@ -19,6 +19,8 @@ protocol TitlesApi: Sendable {
         type: TitleContentType?,
         year: Int?
     ) async throws(TitlesApiError) -> SearchTitlesResponse
+
+    func fetchTitle(by imdbID: String) async throws(TitlesApiError) -> TitleDetailResponse
 }
 
 struct TitlesApiLive: TitlesApi {
