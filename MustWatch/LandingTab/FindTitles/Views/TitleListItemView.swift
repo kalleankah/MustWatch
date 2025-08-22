@@ -1,5 +1,5 @@
 //
-//  TitleListItem.swift
+//  TitleListItemView.swift
 //  MustWatch
 //
 //  Created by Karl Eknefelt on 2025-08-21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TitleListItem: View {
+struct TitleListItemView: View {
     let name: String
     let type: String
     let year: String
@@ -30,5 +30,5 @@ struct TitleListItem: View {
 }
 
 #Preview {
-    TitleListItem(name: "Harry potter", type: "movie", year: "2004")
+    TitleListItemView(name: "Harry potter", type: "movie", year: "2004")
 }

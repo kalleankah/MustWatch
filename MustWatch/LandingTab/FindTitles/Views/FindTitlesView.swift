@@ -34,7 +34,7 @@ struct FindTitlesView: View {
 
     var body: some View {
         NavigationStack {
-            SearchResultList(
+            SearchResultListView(
                 titles: titles,
                 selectedTitle: $selectedTitle
             )
