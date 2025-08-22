@@ -39,6 +39,8 @@ struct TitleSearchFilterView: View {
             }
         }
         .scrollContentBackground(.hidden)
+        .navigationTitle("Filter search results")
+        .navigationBarTitleDisplayMode(.inline)
 
         HStack(spacing: 64) {
             Button("Reset") {

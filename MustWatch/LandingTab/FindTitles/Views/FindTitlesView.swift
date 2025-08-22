@@ -34,82 +34,70 @@ struct FindTitlesView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                List(titles, id: \.imdbID) { title in
-                    NavigationLink(value: title) {
-                        TitleListItem(
-                            name: title.name,
-                            type: title.type.rawValue,
-                            year: title.year
-                        )
-                    }
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button("Rate") {
-                            selectedTitle = title
-                        }
-                    }
-                }
-                .scrollContentBackground(.hidden)
-                .navigationDestination(for: Title.self) { title in
-                    TitleDetailView(
-                        name: title.name,
-                        type: title.type.rawValue,
-                        year: title.year
-                    )
-                }
-                .searchable(text: $searchText, prompt: "Movies, shows, and episodes")
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isShowingFilters = true
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
-                        }
-                        .accessibilityLabel("Filter search results")
-                    }
-                }
-            }
+            SearchResultList(
+                titles: titles,
+                selectedTitle: $selectedTitle
+            )
+            .searchable(text: $searchText, prompt: "Movies, shows, and episodes")
             .navigationTitle("Find titles")
+            .toolbar {
+                toolbar
+            }
         }
         .task(id: searchText) {
             await debouncedSearch()
         }
         .overlay {
-            ProgressView()
-                .controlSize(.large)
-                .opacity(isSearching ? 1 : 0)
-                .animation(.default, value: isSearching)
+            loadingView
         }
-        .alert(
-            error?.localizedDescription ?? "",
-            isPresented: Binding(
-                get: { error != nil},
-                set: { isPresented in
-                    if !isPresented {
-                        error = nil
-                    }
+        .overlay(alignment: .bottom) {
+            ErrorOverlayView(
+                error: error,
+                action: {
+                    retry()
                 }
-            ),
-            presenting: error,
-            actions: { error in
-                Button("Close") {}
-            }
-        )
+            )
+        }
+        .animation(.default, value: error)
         .sheet(isPresented: $isShowingFilters) {
             NavigationStack {
                 TitleSearchFilterView(
                     type: $contentTypeFilter,
                     year: $yearFilter
                 )
-                .navigationTitle("Filter search results")
-                .navigationBarTitleDisplayMode(.inline)
             }
+        }
+    }
+
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                isShowingFilters = true
+            } label: {
+                Image(systemName: "line.3.horizontal.decrease.circle")
+            }
+            .accessibilityLabel("Filter search results")
+        }
+    }
+
+    var loadingView: some View {
+        ProgressView()
+            .controlSize(.large)
+            .opacity(isSearching ? 1 : 0)
+            .animation(.default, value: isSearching)
+    }
+
+    func retry() {
+        error = nil
+        Task {
+            await debouncedSearch()
         }
     }
 
     func debouncedSearch() async {
         guard !searchText.isEmpty else {
             titles = []
+            error = nil
             return
         }
 
@@ -134,6 +122,10 @@ struct FindTitlesView: View {
                 year: yearFilter
             )
         } catch {
+            if case .requestCancelled = error {
+                return
+            }
+
             self.error = error
         }
     }
