@@ -25,11 +25,15 @@ protocol TitlesApi: Sendable {
 
 struct TitlesApiLive: TitlesApi {
 
+    private let apiKey: String
     private let baseURL = "https://www.omdbapi.com/"
-    private let apiKey = "8f808fc"
     private let session: any NetworkSession
 
-    init(session: any NetworkSession = URLSession.shared) {
+    init(
+        apiKey: String = "8f808fc",
+        session: any NetworkSession = URLSession.shared
+    ) {
+        self.apiKey = apiKey
         self.session = session
     }
 

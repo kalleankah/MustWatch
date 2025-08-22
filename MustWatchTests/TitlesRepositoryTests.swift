@@ -39,9 +39,19 @@ struct TitlesRepositoryTests {
 
     @Test("Parse API response to data model")
     func searchTitlesParse() async throws {
-        let searchTerm = "test"
-        let type = Title.ContentType.episode
-        let year = 2000
+        api.dataToReturnSearchTitles = SearchTitlesResponse(
+            titles: [
+                .init(
+                    name: "Test",
+                    year: "2000",
+                    imdbID: "123",
+                    type: "movie",
+                    poster: ""
+                )
+            ],
+            totalResults: "",
+            response: ""
+        )
 
         let expectedResult = Title(
             name: "Test",
@@ -50,11 +60,7 @@ struct TitlesRepositoryTests {
             imdbID: "123"
         )
 
-        let result = try await repository.searchTitles(
-            by: searchTerm,
-            type: type,
-            year: year
-        )
+        let result = try await repository.searchTitles(by: "", type: nil, year: 0)
 
         #expect(result.first == expectedResult)
     }

@@ -9,18 +9,21 @@ import Foundation
 @testable import MustWatch
 
 class NetworkSessionMock: NetworkSession, @unchecked Sendable {
-    var dataToReturn: Data?
-    var errorToThrow: Error?
-    var statusCodeToReturn: Int?
+    var statusCodeToReturn: Int = 200
+    var dataToReturn: Data? = nil
+    var errorToThrow: Error? = nil
+    var requestedURL: URL? = nil
 
     func data(from url: URL) async throws -> (Data, URLResponse) {
+        requestedURL = url
+        
         if let error = errorToThrow {
             throw error
         }
 
         let response = HTTPURLResponse(
             url: url,
-            statusCode: statusCodeToReturn!,
+            statusCode: statusCodeToReturn,
             httpVersion: nil,
             headerFields: nil
         )!

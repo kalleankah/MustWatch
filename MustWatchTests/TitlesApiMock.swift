@@ -7,7 +7,7 @@
 
 @testable import MustWatch
 
-actor TitlesApiMock: TitlesApi {
+class TitlesApiMock: TitlesApi, @unchecked Sendable {
     var dataToReturnSearchTitles: SearchTitlesResponse?
     var numberOfCallsSearchTitles: Int = 0
 

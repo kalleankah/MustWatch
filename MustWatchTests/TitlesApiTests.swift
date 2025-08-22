@@ -9,21 +9,38 @@ import Testing
 import Foundation
 @testable import MustWatch
 
+
 struct TitlesApiTests {
-    let session: NetworkSessionMock
+    let mockSession: NetworkSessionMock
     let api: any TitlesApi
+    static let mockApiKey = "mockApiKey"
 
     init() {
-        session = NetworkSessionMock()
-        api = TitlesApiLive(session: session)
+        mockSession = NetworkSessionMock()
+        api = TitlesApiLive(apiKey: Self.mockApiKey, session: mockSession)
+    }
+
+    @Test("Search Titles Construct URL", arguments: [
+        ("Test Movie", TitleContentType.movie, 1234, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Movie&type=movie&y=1234"),
+        ("Test Series", TitleContentType.series, nil, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Series&type=series"),
+        ("Test", nil, nil, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test")
+    ])
+    func constructURL(
+        searchText: String,
+        type: TitleContentType?,
+        year: Int?,
+        expectedURL: String
+    ) async throws {
+        _ = try? await api.searchTitles(by: searchText, type: type, year: year)
+        #expect(mockSession.requestedURL?.absoluteString == expectedURL)
     }
 
     @Test("Parse a search response")
     func parseSearchTitleResponse() async throws {
         let data = JsonLoader.load("searchResponseSample")
 
-        session.dataToReturn = data
-        session.statusCodeToReturn = 200
+        mockSession.dataToReturn = data
+        mockSession.statusCodeToReturn = 200
 
         let result = try await api.searchTitles(by: "test", type: nil, year: nil)
 
