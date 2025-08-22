@@ -72,6 +72,10 @@ actor TitlesRepositoryLive: TitlesRepository {
                 throw .requestError
             case .decodingError(_), .parsingFailure:
                 throw .responseError
+            case .requestCancelled:
+                throw .requestCancelled
+            case .tooManyResults:
+                throw .tooManyResults
             }
         }
 

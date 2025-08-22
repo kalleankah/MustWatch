@@ -17,8 +17,12 @@ struct FindTitlesView: View {
     @State private var isShowingFilters = false
     @State private var selectedTitle: Title?
 
+    @State private var isSearching = false
+
     @State private var contentTypeFilter: Title.ContentType?
     @State private var yearFilter: Int?
+
+    private let debounceDuration = Duration.milliseconds(500)
 
     var isShowingResults: Bool {
         !searchText.isEmpty || !titles.isEmpty
@@ -64,22 +68,17 @@ struct FindTitlesView: View {
                         .accessibilityLabel("Filter search results")
                     }
                 }
-
-                Button {
-                    fetchTitles()
-                } label: {
-                    Text("Search")
-                        .font(.system(size: 18, weight: .bold))
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentColor)
-                .foregroundStyle(.white)
-                .clipShape(Capsule())
-                .padding(.horizontal, 48)
-                .padding(.bottom, 24)
             }
             .navigationTitle("Find titles")
+        }
+        .task(id: searchText) {
+            await debouncedSearch()
+        }
+        .overlay {
+            ProgressView()
+                .controlSize(.large)
+                .opacity(isSearching ? 1 : 0)
+                .animation(.default, value: isSearching)
         }
         .alert(
             error?.localizedDescription ?? "",
@@ -108,17 +107,34 @@ struct FindTitlesView: View {
         }
     }
 
-    func fetchTitles() {
-        Task {
-            do {
-                titles = try await repository.searchTitles(
-                    by: searchText,
-                    type: contentTypeFilter,
-                    year: yearFilter
-                )
-            } catch is TitlesSearchError {
-                self.error = error
-            }
+    func debouncedSearch() async {
+        guard !searchText.isEmpty else {
+            titles = []
+            return
+        }
+
+        isSearching = true
+
+        do {
+            try await Task.sleep(for: debounceDuration)
+
+            await fetchTitles()
+        } catch {
+
+        }
+
+        isSearching = false
+    }
+
+    func fetchTitles() async {
+        do {
+            titles = try await repository.searchTitles(
+                by: searchText,
+                type: contentTypeFilter,
+                year: yearFilter
+            )
+        } catch {
+            self.error = error
         }
     }
 }
@@ -126,4 +142,11 @@ struct FindTitlesView: View {
 #Preview {
     FindTitlesView()
         .environment(\.titlesRepository, TitlesRepositoryMock())
+}
+
+#Preview("Response error") {
+    let repositoryMock = TitlesRepositoryMock(error: .responseError)
+
+    FindTitlesView()
+        .environment(\.titlesRepository, repositoryMock)
 }

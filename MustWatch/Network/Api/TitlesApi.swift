@@ -65,6 +65,10 @@ struct TitlesApiLive: TitlesApi {
         do {
             (data, response) = try await session.data(from: url)
         } catch {
+            if (error as? URLError)?.code == .cancelled {
+                throw TitlesApiError.requestCancelled
+            }
+
             throw TitlesApiError.requestFailed(underlyingError: error)
         }
 
