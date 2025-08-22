@@ -15,7 +15,7 @@ struct LandingTabView: View {
                     Label("Find", systemImage: "magnifyingglass")
                 }
 
-            MyFavorites()
+            RatedTitlesList()
                 .tabItem {
                     Label("My titles", systemImage: "heart")
                 }
