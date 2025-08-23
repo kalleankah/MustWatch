@@ -121,6 +121,8 @@ struct SearchTitlesView: View {
                 type: contentTypeFilter,
                 year: yearFilter
             )
+
+            error = nil
         } catch {
             if case .requestCancelled = error {
                 return
