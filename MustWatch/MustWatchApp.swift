@@ -12,7 +12,7 @@ import SwiftData
 struct MustWatchApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            TitleModel.self,
+            TitleDetailModel.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
