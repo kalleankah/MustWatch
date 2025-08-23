@@ -158,17 +158,15 @@ struct TitlesApiLive: TitlesApi {
     ) throws -> Result<T, TitlesApiResponseError.ErrorReason> {
         let decoder = JSONDecoder()
 
-        guard
-            let httpResponse = response as? HTTPURLResponse,
-            (200...299).contains(httpResponse.statusCode)
-        else {
-            let failureResponse = try decoder.decode(TitlesApiResponseError.self, from: data)
+        let metaResponse = try decoder.decode(MetaResponse.self, from: data)
 
+        if metaResponse.isSuccessful {
+            let successfulResponse = try decoder.decode(T.self, from: data)
+            return .success(successfulResponse)
+        } else {
+            let failureResponse = try decoder.decode(TitlesApiResponseError.self, from: data)
             return .failure(failureResponse.errorReason)
         }
-
-        let successfulResponse = try decoder.decode(T.self, from: data)
-        return .success(successfulResponse)
     }
 
     private func parseFailure(_ failure: TitlesApiResponseError.ErrorReason) -> TitlesApiError {
