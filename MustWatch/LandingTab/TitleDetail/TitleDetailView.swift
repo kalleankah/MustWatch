@@ -11,12 +11,10 @@ struct TitleDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.titleDetailsRepository) private var repository
 
-    var name: String
-    var type: String
-    var year: String
-    var imdbID: String
+    @Bindable var titleDetailModel: TitleDetailModel
 
     @State private var titleDetail: TitleDetail?
+    @State private var isRatingTitle = false
 
     var body: some View {
         ScrollView {
@@ -42,16 +40,20 @@ struct TitleDetailView: View {
         }
         .contentMargins(.bottom, 64)
         .overlay(alignment: .bottom) {
-            Button("Rate this \(type)") {
-                rateAndSave()
+            Button("Rate this \(titleDetailModel.type.rawValue)") {
+                rate()
             }
             .buttonStyle(.primary)
             .padding(.horizontal, 32)
         }
+        .sheet(isPresented: $isRatingTitle) {
+            RateTitleView(titleModel: titleDetailModel)
+                .presentationDetents([.height(150)])
+        }
     }
 
     var title: some View {
-        Text(name)
+        Text(titleDetailModel.name)
             .font(.largeTitle)
             .multilineTextAlignment(.center)
 
@@ -120,7 +122,7 @@ struct TitleDetailView: View {
     private func fetchDetails() async {
         do {
             titleDetail = try await repository.fetchTitle(
-                by: imdbID,
+                by: titleDetailModel.imdbID,
                 fullPlot: false
             )
         } catch {
@@ -128,29 +130,22 @@ struct TitleDetailView: View {
         }
     }
 
-    private func rateAndSave() {
-        if let type = TitleContentType(rawValue: type) {
-            let titleDetailModel = TitleDetailModel(
-                name: name,
-                year: year,
-                type: type,
-                imdbID: imdbID
-            )
-
-            modelContext.insert(titleDetailModel)
-        }
+    private func rate() {
+        isRatingTitle = true
     }
 }
 
 #Preview {
-    TitleDetailView(
+    @Previewable @State var titleDetailModel = TitleDetailModel(
         name: "The shawshank redemption",
-        type: "movie",
         year: "1994",
+        type: .movie,
         imdbID: "1"
     )
-    .environment( \.titleDetailsRepository, TitleDetailsRepositoryMock(
-        dataToReturn: TitleDetail.sample
-    ))
-    .modelContainer(.previewContainerTitles)
+
+    TitleDetailView(titleDetailModel: titleDetailModel)
+        .environment( \.titleDetailsRepository, TitleDetailsRepositoryMock(
+            dataToReturn: TitleDetail.sample
+        ))
+        .modelContainer(.previewContainerTitles)
 }
