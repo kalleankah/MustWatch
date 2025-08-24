@@ -61,7 +61,7 @@ struct SearchTitlesView: View {
         .animation(.default, value: error)
         .sheet(isPresented: $isShowingFilters) {
             NavigationStack {
-                SearchSearchFilterView(
+                SearchFilterView(
                     type: $contentTypeFilter,
                     year: $yearFilter
                 )
