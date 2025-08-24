@@ -82,7 +82,7 @@ struct TitleDetailView: View {
     }
 
     var poster: some View {
-        Image(.poster3)
+        Image(.poster1)
             .resizable()
             .scaledToFit()
             .frame(maxWidth: 600)
