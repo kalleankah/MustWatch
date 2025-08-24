@@ -167,28 +167,6 @@ struct TitleDetailSection: View {
     }
 }
 
-private extension TitleDetail {
-    var additionalInformation: [(String, String)] {
-        [
-            ("Released", released),
-            ("Runtime", runtime),
-            ("Genre", genre),
-            ("Director", director),
-            ("Country", country),
-            ("Language", language),
-            ("Writer", writer)
-        ]
-    }
-
-    var reviews: [(String, String)] {
-        [
-            ("Metascore", metascore),
-            ("imdbRating", imdbRating),
-            ("imdbVotes", imdbVotes)
-        ]
-    }
-}
-
 #Preview {
     TitleDetailView(
         name: "The shawshank redemption",

@@ -30,6 +30,29 @@ struct TitleDetail: Hashable {
     let boxOffice: String?
     let production: String?
 
+    var additionalInformation: [(String, String)] {
+        [
+            ("Released", released),
+            ("Runtime", runtime),
+            ("Genre", genre),
+            ("Director", director),
+            ("Country", country),
+            ("Language", language),
+            ("Writer", writer)
+        ]
+    }
+
+    var reviews: [(String, String)] {
+        [
+            ("Metascore", metascore),
+            ("imdbRating", imdbRating),
+            ("imdbVotes", imdbVotes)
+        ]
+    }
+
+}
+
+extension TitleDetail {
     enum ContentType: String {
         case movie
         case series
