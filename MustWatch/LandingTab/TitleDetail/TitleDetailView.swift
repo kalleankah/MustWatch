@@ -129,7 +129,7 @@ struct TitleDetailView: View {
     }
 
     private func rateAndSave() {
-        if let type = TitleDetailModel.ContentType(rawValue: type) {
+        if let type = TitleContentType(rawValue: type) {
             let titleDetailModel = TitleDetailModel(
                 name: name,
                 year: year,

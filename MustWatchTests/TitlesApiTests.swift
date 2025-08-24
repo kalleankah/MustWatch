@@ -21,13 +21,13 @@ struct TitlesApiTests {
     }
 
     @Test("Search Titles Construct URL", arguments: [
-        ("Test Movie", TitleContentType.movie, 1234, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Movie&type=movie&y=1234"),
-        ("Test Series", TitleContentType.series, nil, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Series&type=series"),
+        ("Test Movie", TitleApiContentType.movie, 1234, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Movie&type=movie&y=1234"),
+        ("Test Series", TitleApiContentType.series, nil, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test%20Series&type=series"),
         ("Test", nil, nil, "https://www.omdbapi.com/?apikey=\(mockApiKey)&s=Test")
     ])
     func constructURLSearchTitles(
         searchText: String,
-        type: TitleContentType?,
+        type: TitleApiContentType?,
         year: Int?,
         expectedURL: String
     ) async throws {

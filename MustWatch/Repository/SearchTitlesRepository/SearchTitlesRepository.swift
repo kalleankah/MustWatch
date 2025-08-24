@@ -10,14 +10,14 @@ import Foundation
 protocol SearchTitlesRepository: Sendable {
     func searchTitles(
         by searchTerm: String,
-        type: Title.ContentType?,
+        type: TitleContentType?,
         year: Int?
     ) async throws(TitlesError) -> [Title]
 }
 
 private struct SearchRequest: Hashable {
     let searchTerm: String
-    let type: Title.ContentType?
+    let type: TitleContentType?
     let year: Int?
 }
 
@@ -32,7 +32,7 @@ actor SearchTitlesRepositoryLive: SearchTitlesRepository {
 
     func searchTitles(
         by searchTerm: String,
-        type: Title.ContentType?,
+        type: TitleContentType?,
         year: Int?
     ) async throws(TitlesError) -> [Title] {
         let request = SearchRequest(searchTerm: searchTerm, type: type, year: year)
@@ -52,14 +52,29 @@ actor SearchTitlesRepositoryLive: SearchTitlesRepository {
         return data
     }
 
+    private func convertToApiModelIfNeeded(
+        _ domainContentType: TitleContentType?
+    ) throws(TitlesError) -> TitleApiContentType? {
+        guard let domainContentType else {
+            return nil
+        }
+
+        guard let type = TitleApiContentType(rawValue: domainContentType.rawValue) else {
+            throw TitlesError.requestError
+        }
+
+        return type
+    }
+
     private func fetchTitlesFromNetwork(
         by searchTerm: String,
-        type: Title.ContentType?,
+        type domainContentType: TitleContentType?,
         year: Int?
     ) async throws(TitlesError) -> [Title] {
-        let type = TitleContentType(from: type)
+        let type = try convertToApiModelIfNeeded(domainContentType)
 
         let titlesResponse: SearchTitlesResponse
+
         do {
             titlesResponse = try await api.searchTitles(
                 by: searchTerm,
@@ -96,7 +111,7 @@ actor SearchTitlesRepositoryLive: SearchTitlesRepository {
         var titles: [Title] = []
 
         for responseModel in titlesResponse.titles {
-            guard let parsedType = Title.ContentType(string: responseModel.type) else {
+            guard let parsedType = TitleContentType(string: responseModel.type) else {
                 throw .parsingError
             }
 
@@ -114,7 +129,7 @@ actor SearchTitlesRepositoryLive: SearchTitlesRepository {
     }
 }
 
-extension Title.ContentType {
+extension TitleContentType {
     init?(string: String) {
         switch string {
         case "movie":
@@ -130,7 +145,7 @@ extension Title.ContentType {
 }
 
 extension TitleContentType {
-    init?(from type: Title.ContentType?) {
+    init?(from type: TitleContentType?) {
         switch type {
         case .episode:
             self = .episode

@@ -7,16 +7,10 @@
 
 import Foundation
 
-enum TitleContentType: String, CaseIterable {
-    case movie
-    case series
-    case episode
-}
-
 protocol TitlesApi: Sendable {
     func searchTitles(
         by searchTerm: String,
-        type: TitleContentType?,
+        type: TitleApiContentType?,
         year: Int?
     ) async throws(TitlesApiError) -> SearchTitlesResponse
 
@@ -41,7 +35,7 @@ struct TitlesApiLive: TitlesApi {
 
     func searchTitles(
         by searchTerm: String,
-        type: TitleContentType?,
+        type: TitleApiContentType?,
         year: Int?
     ) async throws(TitlesApiError) -> SearchTitlesResponse {
         guard var urlComponents = URLComponents(string: baseURL) else {

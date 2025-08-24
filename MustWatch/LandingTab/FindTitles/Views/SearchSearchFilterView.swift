@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchSearchFilterView: View {
     @Environment(\.dismiss) var dismiss
 
-    @Binding var type: Title.ContentType?
+    @Binding var type: TitleContentType?
     @Binding var year: Int?
 
     @State var isShowingPicker = false
@@ -19,11 +19,11 @@ struct SearchSearchFilterView: View {
         Form {
             Section("Content type") {
                 Picker("Type", selection: $type) {
-                    let any: Title.ContentType? = nil
+                    let any: TitleContentType? = nil
                     Text("Any")
                         .tag(any)
                     
-                    ForEach(Title.ContentType.allCases, id: \.self) { type in
+                    ForEach(TitleContentType.allCases, id: \.self) { type in
                         Text(type.rawValue)
                             .tag(type)
                     }
@@ -62,7 +62,7 @@ struct SearchSearchFilterView: View {
 }
 
 #Preview {
-    @Previewable @State var type: Title.ContentType? = nil
+    @Previewable @State var type: TitleContentType? = nil
     @Previewable @State var year: Int? = nil
 
     SearchSearchFilterView(type: $type, year: $year)

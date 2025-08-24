@@ -19,7 +19,7 @@ struct SearchTitlesView: View {
 
     @State private var isSearching = false
 
-    @State private var contentTypeFilter: Title.ContentType?
+    @State private var contentTypeFilter: TitleContentType?
     @State private var yearFilter: Int?
 
     private let debounceDuration = Duration.milliseconds(500)

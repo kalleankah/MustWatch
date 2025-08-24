@@ -25,7 +25,7 @@ struct TitleDetail: Hashable {
     let imdbRating: String
     let imdbVotes: String
     let imdbID: String
-    let type: ContentType
+    let type: TitleContentType
     let dvd: String?
     let boxOffice: String?
     let production: String?
@@ -52,36 +52,15 @@ struct TitleDetail: Hashable {
 }
 
 extension TitleDetail {
-    enum ContentType: String {
-        case movie
-        case series
-        case episode
-    }
-
     struct Rating: Hashable {
         let source: String
         let value: String
     }
 }
 
-extension TitleDetail.ContentType {
-    init?(from response: String) {
-        switch response {
-        case "movie":
-            self = .movie
-        case "series":
-            self = .series
-        case "episode":
-            self = .episode
-        default:
-            return nil
-        }
-    }
-}
-
 extension TitleDetail {
     init?(from response: TitleDetailResponse) {
-        guard let type = ContentType(from: response.type) else {
+        guard let type = TitleContentType(rawValue: response.type) else {
             return nil
         }
 

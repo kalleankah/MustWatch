@@ -18,7 +18,7 @@ class TitlesApiMock: TitlesApi, @unchecked Sendable {
 
     func searchTitles(
         by searchTerm: String,
-        type: TitleContentType?,
+        type: TitleApiContentType?,
         year: Int?
     ) async throws(TitlesApiError) -> SearchTitlesResponse {
         numberOfCallsSearchTitles += 1

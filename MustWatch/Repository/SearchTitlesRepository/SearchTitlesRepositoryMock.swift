@@ -11,7 +11,7 @@ struct SearchTitlesRepositoryMock: SearchTitlesRepository {
 
     func searchTitles(
         by searchTerm: String,
-        type: Title.ContentType?,
+        type: TitleContentType?,
         year: Int?
     ) async throws(TitlesError) -> [Title] {
         if let error {

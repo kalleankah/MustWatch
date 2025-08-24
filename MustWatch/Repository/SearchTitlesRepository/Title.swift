@@ -6,14 +6,8 @@
 //
 
 struct Title: Hashable {
-    enum ContentType: String, CaseIterable {
-        case movie
-        case series
-        case episode
-    }
-
     let name: String
     let year: String
-    let type: ContentType
+    let type: TitleContentType
     let imdbID: String
 }

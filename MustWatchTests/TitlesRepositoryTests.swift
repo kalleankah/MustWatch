@@ -23,7 +23,7 @@ struct TitlesRepositoryTests {
     @Test("On cache miss, calls API and saves new data")
     func searchTitlesCacheMiss() async throws {
         let searchTerm = "test"
-        let type = Title.ContentType.episode
+        let type = TitleContentType.episode
         let year = 2000
 
         try #require(await api.numberOfCallsSearchTitles == 0)
@@ -68,7 +68,7 @@ struct TitlesRepositoryTests {
     @Test("On cache hit, return cached data without making a new request")
     func searchTitlesCacheHit() async throws {
         let searchTerm = "test"
-        let type = Title.ContentType.episode
+        let type = TitleContentType.episode
         let year = 2000
 
         let firstResult = try await repository.searchTitles(
