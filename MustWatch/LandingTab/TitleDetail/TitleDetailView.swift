@@ -60,7 +60,7 @@ struct TitleDetailView: View {
     }
 
     var poster: some View {
-        Image([ImageResource.poster1, ImageResource.poster2, ImageResource.poster3].randomElement()!)
+        Image(.poster3)
             .resizable()
             .scaledToFit()
             .frame(maxWidth: 600)
