@@ -23,6 +23,10 @@ struct TitleDetailView: View {
 
                 title
 
+                if let rating = titleDetailModel.rating {
+                    userRating(rating)
+                }
+
                 cast
 
                 reviews
@@ -33,6 +37,7 @@ struct TitleDetailView: View {
 
                 awards
             }
+            .animation(.default, value: titleDetailModel.rating)
             .padding(26)
             .task {
                 await fetchDetails()
@@ -50,11 +55,13 @@ struct TitleDetailView: View {
             }
         }
         .overlay(alignment: .bottom) {
-            Button("Rate this \(titleDetailModel.type.rawValue)") {
-                rate()
+            if titleDetailModel.rating == nil {
+                Button("Rate this \(titleDetailModel.type.rawValue)") {
+                    rate()
+                }
+                .buttonStyle(.primary)
+                .padding(.horizontal, 32)
             }
-            .buttonStyle(.primary)
-            .padding(.horizontal, 32)
         }
         .sheet(isPresented: $isRatingTitle) {
             if titleDetailModel.rating == nil {
@@ -81,6 +88,23 @@ struct TitleDetailView: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .frame(maxWidth: .infinity)
             .padding(.horizontal)
+    }
+
+    func userRating(_ rating: Int) -> some View {
+        HStack {
+            ForEach(1...10, id: \.self) { starNumber in
+                let isSelected = starNumber <= rating
+
+                Button {
+                    updateRating(starNumber)
+                } label: {
+                    Image(systemName: "star")
+                        .foregroundStyle(isSelected ? .yellow : .primary)
+                        .symbolVariant(isSelected ? .fill : .none)
+                }
+            }
+        }
+        .padding(.vertical)
     }
 
     @ViewBuilder
@@ -147,6 +171,10 @@ struct TitleDetailView: View {
     private func rate() {
         modelContext.insert(titleDetailModel)
         isRatingTitle = true
+    }
+
+    private func updateRating(_ newRating: Int) {
+        titleDetailModel.rating = newRating
     }
 }
 
