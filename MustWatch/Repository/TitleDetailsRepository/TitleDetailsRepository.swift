@@ -71,6 +71,10 @@ actor TitleDetailsRepositoryLive: TitleDetailsRepository {
             }
         }
 
-        return TitleDetail(from: titleDetailResponse)
+        guard let titleDetail = TitleDetail(from: titleDetailResponse) else {
+            throw .parsingError
+        }
+
+        return titleDetail
     }
 }

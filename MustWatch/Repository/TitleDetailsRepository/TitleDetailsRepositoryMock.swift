@@ -44,7 +44,7 @@ private extension TitleDetail {
         imdbRating: "imdbRating",
         imdbVotes: "imdbVotes",
         imdbID: "imdbID",
-        type: "type",
+        type: .movie,
         dvd: "dvd",
         boxOffice: "boxOffice",
         production: "production"

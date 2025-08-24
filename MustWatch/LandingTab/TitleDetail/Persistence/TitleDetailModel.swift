@@ -39,6 +39,17 @@ extension TitleDetailModel.ContentType {
             .episode
         }
     }
+
+    init(from type: TitleDetail.ContentType) {
+        self = switch type {
+        case .movie:
+            .movie
+        case .series:
+            .series
+        case .episode:
+            .episode
+        }
+    }
 }
 
 extension TitleDetailModel {
@@ -48,6 +59,15 @@ extension TitleDetailModel {
             year: title.year,
             type: .init(from: title.type),
             imdbID: title.imdbID
+        )
+    }
+
+    convenience init(from titleDetail: TitleDetail) {
+        self.init(
+            name: titleDetail.title,
+            year: titleDetail.year,
+            type: ContentType(from: titleDetail.type),
+            imdbID: titleDetail.imdbID
         )
     }
 }

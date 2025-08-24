@@ -25,7 +25,7 @@ struct TitleDetail: Hashable {
     let imdbRating: String
     let imdbVotes: String
     let imdbID: String
-    let type: String
+    let type: ContentType
     let dvd: String?
     let boxOffice: String?
     let production: String?
@@ -49,7 +49,6 @@ struct TitleDetail: Hashable {
             ("imdbVotes", imdbVotes)
         ]
     }
-
 }
 
 extension TitleDetail {
@@ -65,8 +64,27 @@ extension TitleDetail {
     }
 }
 
+extension TitleDetail.ContentType {
+    init?(from response: String) {
+        switch response {
+        case "movie":
+            self = .movie
+        case "series":
+            self = .series
+        case "episode":
+            self = .episode
+        default:
+            return nil
+        }
+    }
+}
+
 extension TitleDetail {
-    init(from response: TitleDetailResponse) {
+    init?(from response: TitleDetailResponse) {
+        guard let type = ContentType(from: response.type) else {
+            return nil
+        }
+
         self.init(
             title: response.title,
             year: response.year,
@@ -87,7 +105,7 @@ extension TitleDetail {
             imdbRating: response.imdbRating,
             imdbVotes: response.imdbVotes,
             imdbID: response.imdbID,
-            type: response.type,
+            type: type,
             dvd: response.dvd,
             boxOffice: response.boxOffice,
             production: response.production
@@ -127,7 +145,7 @@ extension TitleDetail {
         imdbRating: "9.3",
         imdbVotes: "3,075,711",
         imdbID: "tt0111161",
-        type: "movie",
+        type: .movie,
         dvd: "N/A",
         boxOffice: "$28,767,189",
         production: "N/A"
