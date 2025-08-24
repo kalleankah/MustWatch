@@ -18,12 +18,20 @@ class TitleDetailModel {
     var name: String
     var year: String
     var type: ContentType
+    var rating: Int?
     @Attribute(.unique) var imdbID: String
 
-    init(name: String, year: String, type: ContentType, imdbID: String) {
+    init(
+        name: String,
+        year: String,
+        type: ContentType,
+        rating: Int? = nil,
+        imdbID: String
+    ) {
         self.name = name
         self.year = year
         self.type = type
+        self.rating = rating
         self.imdbID = imdbID
     }
 }

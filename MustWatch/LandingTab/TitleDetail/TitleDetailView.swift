@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TitleDetailView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.titleDetailsRepository) private var repository
 
     var name: String
@@ -38,6 +39,14 @@ struct TitleDetailView: View {
             .task {
                 await fetchDetails()
             }
+        }
+        .contentMargins(.bottom, 64)
+        .overlay(alignment: .bottom) {
+            Button("Rate this \(type)") {
+                rateAndSave()
+            }
+            .buttonStyle(.primary)
+            .padding(.horizontal, 32)
         }
     }
 
@@ -118,6 +127,19 @@ struct TitleDetailView: View {
             print("fail")
         }
     }
+
+    private func rateAndSave() {
+        if let type = TitleDetailModel.ContentType(rawValue: type) {
+            let titleDetailModel = TitleDetailModel(
+                name: name,
+                year: year,
+                type: type,
+                imdbID: imdbID
+            )
+
+            modelContext.insert(titleDetailModel)
+        }
+    }
 }
 
 #Preview {
@@ -130,4 +152,5 @@ struct TitleDetailView: View {
     .environment( \.titleDetailsRepository, TitleDetailsRepositoryMock(
         dataToReturn: TitleDetail.sample
     ))
+    .modelContainer(.previewContainerTitles)
 }

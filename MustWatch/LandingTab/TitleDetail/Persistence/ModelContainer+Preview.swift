@@ -21,12 +21,14 @@ extension ModelContainer {
                 name: "Shrek",
                 year: "2000",
                 type: .movie,
+                rating: 4,
                 imdbID: "1"
             ),
             TitleDetailModel(
                 name: "Hercules",
                 year: "1997",
                 type: .movie,
+                rating: 10,
                 imdbID: "2"
             )
         ]
