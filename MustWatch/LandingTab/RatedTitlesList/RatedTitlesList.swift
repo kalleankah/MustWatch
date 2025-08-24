@@ -24,14 +24,8 @@ struct RatedTitlesList: View {
                 }
             }
             .navigationDestination(for: TitleDetailModel.self) { title in
-                let titleDetailModel = TitleDetailModel(
-                    name: title.name,
-                    year: title.year,
-                    type: title.type,
-                    imdbID: title.imdbID
-                )
-
-                TitleDetailView(titleDetailModel: titleDetailModel)
+                @Bindable var title = title
+                TitleDetailView(titleDetailModel: title)
             }
         }
     }

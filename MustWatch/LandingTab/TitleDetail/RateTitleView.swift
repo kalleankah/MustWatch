@@ -8,7 +8,9 @@
 import SwiftUI
 import SwiftData
 
-struct RateTitleView: View {    
+struct RateTitleView: View {
+    @Environment(\.dismiss) private var dismiss
+
     @Bindable var titleModel: TitleDetailModel
 
     var body: some View {
@@ -35,6 +37,7 @@ struct RateTitleView: View {
 
     func updateRating(_ newRating: Int) {
         titleModel.rating = newRating
+        dismiss()
     }
 }
 

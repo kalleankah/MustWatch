@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchTitlesListView: View {
+    @Environment(\.modelContext) private var modelContext
     var titles: [Title]
     @Binding var selectedTitle: Title?
 
@@ -28,14 +30,24 @@ struct SearchTitlesListView: View {
         }
         .scrollContentBackground(.hidden)
         .navigationDestination(for: Title.self) { title in
-            let titleDetailModel = TitleDetailModel(
-                name: title.name,
-                year: title.year,
-                type: title.type,
-                imdbID: title.imdbID
+            let imdbID = title.imdbID
+
+            let fetchDescriptor = FetchDescriptor<TitleDetailModel>(
+                predicate: #Predicate { $0.imdbID == imdbID }
             )
 
-            TitleDetailView(titleDetailModel: titleDetailModel)
+            if let localTitle = try? modelContext.fetch(fetchDescriptor).first {
+                TitleDetailView(titleDetailModel: localTitle)
+            } else {
+                let titleDetailModel = TitleDetailModel(
+                    name: title.name,
+                    year: title.year,
+                    type: title.type,
+                    imdbID: title.imdbID
+                )
+
+                TitleDetailView(titleDetailModel: titleDetailModel)
+            }
         }
     }
 }

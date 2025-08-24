@@ -39,6 +39,16 @@ struct TitleDetailView: View {
             }
         }
         .contentMargins(.bottom, 64)
+        .toolbar {
+            if titleDetailModel.rating != nil {
+                ToolbarItem {
+                    Button("Remove") {
+                        titleDetailModel.rating = nil
+                        modelContext.delete(titleDetailModel)
+                    }
+                }
+            }
+        }
         .overlay(alignment: .bottom) {
             Button("Rate this \(titleDetailModel.type.rawValue)") {
                 rate()
@@ -47,6 +57,10 @@ struct TitleDetailView: View {
             .padding(.horizontal, 32)
         }
         .sheet(isPresented: $isRatingTitle) {
+            if titleDetailModel.rating == nil {
+                modelContext.delete(titleDetailModel)
+            }
+        } content: {
             RateTitleView(titleModel: titleDetailModel)
                 .presentationDetents([.height(150)])
         }
@@ -131,6 +145,7 @@ struct TitleDetailView: View {
     }
 
     private func rate() {
+        modelContext.insert(titleDetailModel)
         isRatingTitle = true
     }
 }
