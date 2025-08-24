@@ -61,6 +61,7 @@ struct TitleDetailView: View {
                 }
                 .buttonStyle(.primary)
                 .padding(.horizontal, 32)
+                .padding(.vertical)
             }
         }
         .sheet(isPresented: $isRatingTitle) {
